@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_book/main.dart';
+import 'package:recipe_book/models/recipe_model.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreenTablet extends StatefulWidget {
   final RecipeModel recipe;
 
-  const DetailsScreen({
+  const DetailsScreenTablet({
     super.key,
     required this.recipe,
   });
 
   @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
+  State<DetailsScreenTablet> createState() => _DetailsScreenTabletState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _DetailsScreenTabletState extends State<DetailsScreenTablet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,22 +48,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
 
             /// image
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 240.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18.0),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      widget.recipe.imageUrl,
-                    ),
-                    fit: BoxFit.cover,
+            Container(
+              width: double.infinity,
+              height: 340.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                image: DecorationImage(
+                  image: NetworkImage(
+                    widget.recipe.imageUrl,
                   ),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -292,9 +286,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
 
             /// ingredients
-            ListView.separated(
+            GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                mainAxisSpacing: 16.0,
+                crossAxisSpacing: 16.0,
+                childAspectRatio: 1.5,
+              ),
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: 24.0),
-              itemBuilder: (context, index) => Row(
+              itemBuilder: (context, index) => Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     width: 60.0,
@@ -309,19 +312,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 16.0,
+                    height: 16.0,
                   ),
-                  Expanded(
-                    child: Text(
-                      widget.recipe.ingredients[index].name,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w400,
-                      ),
+                  Text(
+                    widget.recipe.ingredients[index].name,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   SizedBox(
-                    width: 16.0,
+                    height: 4.0,
                   ),
                   Text(
                     widget.recipe.ingredients[index].piece,
@@ -329,15 +330,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       fontSize: 18.0,
                       fontWeight: FontWeight.w400,
                     ),
-                  )
+                  ),
                 ],
               ),
-              separatorBuilder: (context, index) => SizedBox(
-                height: 16.0,
-              ),
               itemCount: widget.recipe.ingredients.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
             ),
 
             SizedBox(
